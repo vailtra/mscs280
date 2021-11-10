@@ -19,7 +19,8 @@ public:
     Graph(int V);
     void addEdge(int u, int v, int w);
     int find_set(int i);
-    int getWeight();
+    int getMinimumWeight();
+    int getWeight(int vert1, int vert2);
     void union_set(int u, int v);
     void kruskal();
     void print();
@@ -82,19 +83,31 @@ void Graph::print() {
             << T[i].first;
         cout << endl;
     }
-    //cout << weight;
-
 }
 
-//Return the weight of the minimum spanning tree
-int Graph::getWeight() {
+//Return the total weight of the minimum spanning tree
+int Graph::getMinimumWeight() {
     for (int i = 0; i < T.size(); i++) {
         weight += T[i].first;
     }
     return weight;
 }
 
-//Returns the minimum spanning tree;
+//get weight of an edge between two different vertices
+int Graph::getWeight(int vert1, int vert2) {
+    //loop through the graph G
+    for (int i = 0; i < G.size(); i++) {
+        //if vert1 or vert 2 equals the first vertex at the current iteration and vert1 or vert2 equals the second vertex at the current iteration
+        if ((G[i].second.first == vert1 || G[i].second.first == vert2) && (G[i].second.second == vert1 || G[i].second.second == vert2)) {
+            //return the weight of the edge
+            return G[i].first;
+        }
+    }
+    //no matches were found, return 0
+    return 0;
+}
+
+//Returns the minimum spanning tree
 vector<pair<int, edge>> Graph:: getMST() {
     return T;
 }

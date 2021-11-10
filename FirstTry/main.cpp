@@ -12,7 +12,7 @@
 
 
 int main() {
-	vector<pair<int, edge> > MST;
+	vector<pair<int, edge>> MST;
 	int weight;
 
 	// Read in file -- contains coordinates of places/cities
@@ -21,7 +21,7 @@ int main() {
 	//g(# of vertices)
 	Graph g(6);
 
-	//addEdge(vertex1, vertex2, weight
+	//addEdge(vertex1, vertex2, weight)
 	//test graph
 	g.addEdge(0, 1, 5);
 	g.addEdge(0, 2, 4);
@@ -38,9 +38,13 @@ int main() {
 	g.kruskal();
 	g.print();
 
+	weight = g.getMinimumWeight();
 	MST = g.getMST();
-	weight = g.getWeight();
-	std::cout << weight;
+	std::cout << weight << std::endl;
+
+	//Returns 0 if there does not exist an edge between the two vertices. The order that you input the vertices in the function does not matter.
+	std::cout << g.getWeight(3,5);
+
 	// Find eulerian tour
 
 	// Convert to TSP
