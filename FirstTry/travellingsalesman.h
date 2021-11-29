@@ -106,9 +106,8 @@ void EulerianTour::findPerfectMatching() {
 	int currSize = 0;
 
 	// Takes first edge in oddVertSubgraph and uses it as starting edge for perfect matching in new graph
+	perfMatch.push_back(oddVertSubgraph.at(findMinimumWeight()));
 
-	//perfMatch.push_back(oddVertSubgraph.at(findMinimumWeight()));
-	perfMatch.push_back(oddVertSubgraph.at(0));
 	// While oddVert is not empty
 	while (oddVertSubgraph.size() > 0) {
 
