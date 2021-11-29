@@ -10,7 +10,7 @@ using namespace std;
 class Graph {
 private:
     vector<pair<int, edge> > G;  // graph
-    vector<pair<int, edge> > T;  // mst
+    vector<pair<int, edge> > T;  // Minimum spanning tree
     int* parent;
     //vertices in the graph
     int V;
@@ -19,7 +19,7 @@ public:
     Graph(int V);
     void addEdge(int u, int v, int w);
     int find_set(int i);
-    int getMinimumWeight();
+    int getTreeWeight();
     int getWeight(int vert1, int vert2);
     void union_set(int u, int v);
     void kruskal();
@@ -37,15 +37,19 @@ Graph::Graph(int V) {
     T.clear();
     weight = 0;
 }
+
+//add an edge to the graph structure
 void Graph::addEdge(int u, int v, int w) {
     G.push_back(make_pair(w, edge(u, v)));
 }
+
+//Finds the parent of a specific edge
 int Graph::find_set(int i) {
     // If i is the parent of itself
     if (i == parent[i])
         return i;
     else
-        //recursibly call find_set to find the parent.
+        //Return the value of the parent[i]
         return find_set(parent[i]);
 }
 
@@ -86,10 +90,13 @@ void Graph::print() {
 }
 
 //Return the total weight of the minimum spanning tree
-int Graph::getMinimumWeight() {
+int Graph::getTreeWeight() {
+    //loop through the tree
     for (int i = 0; i < T.size(); i++) {
+        //add the weight of each edge
         weight += T[i].first;
     }
+    //return the total weight
     return weight;
 }
 
@@ -109,5 +116,6 @@ int Graph::getWeight(int vert1, int vert2) {
 
 //Returns the minimum spanning tree
 vector<pair<int, edge>> Graph:: getMST() {
+    //return this obejcts instance of the minimum spanning tree
     return T;
 }
