@@ -26,65 +26,40 @@ int main() {
 
 	// Read in file -- contains coordinates of places/cities
 
-	// Declare Graph object.
-	//g(# of vertices)
-	Graph g(6);
+	int numVert = 3;
+	Graph test(numVert);
+	// ADD EDGES
+	test.addEdge(0, 1, 2);
+	test.addEdge(0, 2, 2);
+	test.addEdge(1, 2, 1);
 
-	//addEdge(vertex1, vertex2, weight
-	//test graph
-	g.addEdge(0, 1, 7);
-	g.addEdge(0, 2, 9);
-	g.addEdge(0, 3, 99);
-	g.addEdge(0, 4, 13);
-	g.addEdge(0, 5, 11);
+	// CONSTRUCT MINIMUM SPANNING TREE
+	test.kruskal();
+	MST = test.getMST();
 
-	g.addEdge(1, 2, 16);
-	g.addEdge(1, 3, 16);
-	g.addEdge(1, 4, 15);
-	g.addEdge(1, 5, 99);
-
-	g.addEdge(2, 3, 14);
-	g.addEdge(2, 4, 14);
-	g.addEdge(2, 5, 99);
-
-	g.addEdge(3, 4, 25);
-	g.addEdge(3, 5, 5);
-
-	g.addEdge(4, 5, 99);
-
-
-	// Construct minimum spanning tree (MST) using Kruskals
-	g.kruskal();
-	g.print();
-
-	MST = g.getMST();
-
-	std::cout << std::endl << std::endl;
-	EulerianTour eulerian(MST, 6);
+	EulerianTour eulerian(MST, numVert);
 
 	eulerian.printMST();
 
-	// Finds odd vertices
+	// FINDS ODD VERTICES
 	eulerian.findOddVertices();
 	eulerian.printOddVertices();
 
-	// Constructs complete graph of odd vertices
-	eulerian.inducedSubgraph(g);
+	// COMPLETE GRAPH INDUCED BY ODD VERTICES
+	eulerian.inducedSubgraph(test);
 	eulerian.printInducedSubgraph();
 
-	// Finds a Perfect Matching of odd vertices
+	// PERFECT MATCHING OF ODD VERTICE INDUCED SUBGRAPH
 	eulerian.findPerfectMatching();
 	eulerian.printPerfectMatching();
 
-	// Overlays Minimum Spanning Tree and Perfect Matching
+	// OVERALY OF MINIMUM SPANNING TREE AND PERFECT MATCHING
 	eulerian.overlayGraphs();
 	eulerian.printOverlay();
 
-	// Hamiltonian Circuit
-	eulerian.findHamiltonianCircuit(g);
+	// CONSTRUCTS HAMILTON CIRCUIT
+	eulerian.findHamiltonianCircuit(test);
 	eulerian.printHamiltonianCircuit();
-
-	// Print graph/results
 
 	// Ouput to terminal
 
