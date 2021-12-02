@@ -1,6 +1,10 @@
 #include <iostream>
 #include "Graph.h"
+#include <iostream>
+#include <fstream>
+#include <string>
 #include "travellingsalesman.h"
+using namespace std;
 
 /* TRAVELLING SALESMAN PROBLEM
 * CHRISTOFIDES ALGORITHM -- USING KRUSKAL'S FOR MINIMUM SPANNING TREE
@@ -22,6 +26,29 @@
 
 
 int main() {
+	vector<string> graphFromFile;
+	vector<string> parsed;
+	ifstream myfile;
+	myfile.open("C:/Users/Big Pimpin'/source/repos/mscs280-FINALMAYBE/FirstTry/travel.txt");
+
+	if (myfile) {
+		int i = 0;
+		string data;
+		while (getline(myfile, data)) {
+			graphFromFile.push_back(data);
+			i++;
+		}
+	}
+	
+	string delimiter = "[";
+	for (int i = 1; i < graphFromFile.size(); i++) {
+		//string token = graphFromFile.at(i).substr(0, graphFromFile.find(",");
+		if ((i != graphFromFile.size() - 1)) {
+			cout << graphFromFile.at(i) << endl;
+		}
+	}
+
+
 	vector<pair<int, edge> > MST;
 
 	// Read in file -- contains coordinates of places/cities
