@@ -28,37 +28,73 @@ using namespace std;
 int main() {
 	vector<string> graphFromFile;
 	vector<string> parsed;
+	vector<int> nums;
+	vector<pair<int, edge> > MST;
 	ifstream myfile;
-	myfile.open("C:/Users/Big Pimpin'/source/repos/mscs280-FINALMAYBE/FirstTry/travel.txt");
+	int numVert = 0;
 
+	//Read in file
+	myfile.open("C:/Users/Big Pimpin'/source/repos/mscs280-FINALMAYBE/FirstTry/travel.txt");
 	if (myfile) {
 		int i = 0;
 		string data;
 		while (getline(myfile, data)) {
-			graphFromFile.push_back(data);
-			i++;
+			if (numVert != 0) {
+				graphFromFile.push_back(data);
+			}
+			numVert++;
 		}
 	}
-	
-	string delimiter = "[";
-	for (int i = 1; i < graphFromFile.size(); i++) {
-		//string token = graphFromFile.at(i).substr(0, graphFromFile.find(",");
+
+	Graph test(numVert-2);
+	string temp = "";
+
+	//I barely even know at this point but it works. insert harold stock image here.
+	for (int i = 0; i < graphFromFile.size()-2; i++) {
+		//set string to be current line from file
+		string my_str = graphFromFile.at(i);
+
+		//Filter out any spaces, [ or ]
+		my_str.erase(remove(my_str.begin(), my_str.end(), '['), my_str.end());
+		my_str.erase(remove(my_str.begin(), my_str.end(), ' '), my_str.end());
+		my_str.erase(remove(my_str.begin(), my_str.end(), ']'), my_str.end());
+
+		//if it's not the last character in the graph
 		if ((i != graphFromFile.size() - 1)) {
-			cout << graphFromFile.at(i) << endl;
+			//loop through the filtered line's size
+			for (int j = 0; j < my_str.size(); j++) {
+				//add any characters that are not a comma
+				if (my_str.at(j) != ',') {
+					//add the characters to the temp string
+					temp += my_str.at(j);
+				}
+				else {
+					//convert the temp string to an int
+					int num = stoi(temp);
+					//add it to the nums vector
+					nums.push_back(num);
+					//clear the temp string
+					temp = "";
+					//if it's the last character in my_str
+					if (j == my_str.size() - 1) {
+						//loop through the nums vector
+						for (int x = 0; x < nums.size(); x++) {
+							//make sure we don't add duplicate edges
+							if ((i<x)) {
+								//add edge to graph at pos i, x and the number at the nums vector at x
+								cout << "start vertex: " << i << endl;
+								cout << "end vertex: " << x << endl;
+								cout << "weight : " << nums.at(x) << endl << endl;
+								test.addEdge(i, x, nums.at(x));
+							}
+						}
+						//clear the nums array
+						nums.clear();
+					}
+				}
+			}
 		}
 	}
-
-
-	vector<pair<int, edge> > MST;
-
-	// Read in file -- contains coordinates of places/cities
-
-	int numVert = 3;
-	Graph test(numVert);
-	// ADD EDGES
-	test.addEdge(0, 1, 2);
-	test.addEdge(0, 2, 2);
-	test.addEdge(1, 2, 1);
 
 	// CONSTRUCT MINIMUM SPANNING TREE
 	test.kruskal();
