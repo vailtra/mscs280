@@ -23,6 +23,7 @@ public:
     int find_set(int i);
     int getMinimumWeight();
     int getWeight(int vert1, int vert2);
+    bool sameWeights();
     void union_set(int u, int v);
     void kruskal();
     void print();
@@ -93,6 +94,16 @@ int Graph::getMinimumWeight() {
         weight += T[i].first;
     }
     return weight;
+}
+
+bool Graph::sameWeights() {
+    int temp = G[0].first;
+    for (int i = 1; i < G.size(); i++) {
+        if (G[i].first != temp) {
+            return false;
+        }
+    }
+    return true;
 }
 
 //get weight of an edge between two different vertices

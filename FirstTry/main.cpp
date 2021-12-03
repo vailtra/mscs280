@@ -36,7 +36,7 @@ int main() {
 	//Read in file
 	myfile.open("C:/Users/Big Pimpin'/source/repos/mscs280-FINALMAYBE/FirstTry/travel.txt");
 	if (myfile) {
-		int i = 0;
+		//int i = 0;
 		string data;
 		while (getline(myfile, data)) {
 			if (numVert != 0) {
@@ -45,7 +45,9 @@ int main() {
 			numVert++;
 		}
 	}
+	myfile.close();
 
+	//file has 2 extra lines that aren't needed being at the start and end
 	Graph test(numVert-2);
 	string temp = "";
 
@@ -96,35 +98,68 @@ int main() {
 		}
 	}
 
-	// CONSTRUCT MINIMUM SPANNING TREE
-	test.kruskal();
-	MST = test.getMST();
+	if (!test.sameWeights()) {
+		// CONSTRUCT MINIMUM SPANNING TREE
+		test.kruskal();
+		MST = test.getMST();
 
-	EulerianTour eulerian(MST, numVert);
+		EulerianTour eulerian(MST, numVert);
 
-	eulerian.printMST();
+		eulerian.printMST();
 
-	// FINDS ODD VERTICES
-	eulerian.findOddVertices();
-	eulerian.printOddVertices();
+		// FINDS ODD VERTICES
+		eulerian.findOddVertices();
+		eulerian.printOddVertices();
 
-	// COMPLETE GRAPH INDUCED BY ODD VERTICES
-	eulerian.inducedSubgraph(test);
-	eulerian.printInducedSubgraph();
+		// COMPLETE GRAPH INDUCED BY ODD VERTICES
+		eulerian.inducedSubgraph(test);
+		eulerian.printInducedSubgraph();
 
-	// PERFECT MATCHING OF ODD VERTICE INDUCED SUBGRAPH
-	eulerian.findPerfectMatching();
-	eulerian.printPerfectMatching();
+		// PERFECT MATCHING OF ODD VERTICE INDUCED SUBGRAPH
+		eulerian.findPerfectMatching();
+		eulerian.printPerfectMatching();
 
-	// OVERALY OF MINIMUM SPANNING TREE AND PERFECT MATCHING
-	eulerian.overlayGraphs();
-	eulerian.printOverlay();
+		// OVERALY OF MINIMUM SPANNING TREE AND PERFECT MATCHING
+		eulerian.overlayGraphs();
+		eulerian.printOverlay();
 
-	// CONSTRUCTS HAMILTON CIRCUIT
-	eulerian.findHamiltonianCircuit(test);
-	eulerian.printHamiltonianCircuit();
+		// CONSTRUCTS HAMILTON CIRCUIT
+		eulerian.findHamiltonianCircuit(test);
+		eulerian.printHamiltonianCircuit();
+	}
+	else {
+		cout << "distance between vertices are all the same, go in any order.";
+	}
 
-	// Ouput to terminal
+	//// CONSTRUCT MINIMUM SPANNING TREE
+	//test.kruskal();
+	//MST = test.getMST();
+
+	//EulerianTour eulerian(MST, numVert);
+
+	//eulerian.printMST();
+
+	//// FINDS ODD VERTICES
+	//eulerian.findOddVertices();
+	//eulerian.printOddVertices();
+
+	//// COMPLETE GRAPH INDUCED BY ODD VERTICES
+	//eulerian.inducedSubgraph(test);
+	//eulerian.printInducedSubgraph();
+
+	//// PERFECT MATCHING OF ODD VERTICE INDUCED SUBGRAPH
+	//eulerian.findPerfectMatching();
+	//eulerian.printPerfectMatching();
+
+	//// OVERALY OF MINIMUM SPANNING TREE AND PERFECT MATCHING
+	//eulerian.overlayGraphs();
+	//eulerian.printOverlay();
+
+	//// CONSTRUCTS HAMILTON CIRCUIT
+	//eulerian.findHamiltonianCircuit(test);
+	//eulerian.printHamiltonianCircuit();
+
+	//// Ouput to terminal
 
 	return 0;
 }
