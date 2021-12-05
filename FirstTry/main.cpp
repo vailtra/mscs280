@@ -1,6 +1,10 @@
 #include <iostream>
 #include "Graph.h"
+#include <iostream>
+#include <fstream>
+#include <string>
 #include "travellingsalesman.h"
+using namespace std;
 
 /* TRAVELLING SALESMAN PROBLEM
 * CHRISTOFIDES ALGORITHM -- USING KRUSKAL'S FOR MINIMUM SPANNING TREE
@@ -22,46 +26,140 @@
 
 
 int main() {
+	vector<string> graphFromFile;
+	vector<string> parsed;
+	vector<int> nums;
 	vector<pair<int, edge> > MST;
+	ifstream myfile;
+	int numVert = 0;
 
-	// Read in file -- contains coordinates of places/cities
+	//Read in file
+	myfile.open("C:/Users/Big Pimpin'/source/repos/mscs280-FINALMAYBE/FirstTry/travel.txt");
+	if (myfile) {
+		//int i = 0;
+		string data;
+		while (getline(myfile, data)) {
+			if (numVert != 0) {
+				graphFromFile.push_back(data);
+			}
+			numVert++;
+		}
+	}
+	myfile.close();
 
-	int numVert = 3;
-	Graph test(numVert);
-	// ADD EDGES
-	test.addEdge(0, 1, 2);
-	test.addEdge(0, 2, 2);
-	test.addEdge(1, 2, 1);
+	//file has 2 extra lines that aren't needed being at the start and end
+	Graph test(numVert-2);
+	string temp = "";
 
-	// CONSTRUCT MINIMUM SPANNING TREE
-	test.kruskal();
-	MST = test.getMST();
+	//I barely even know at this point but it works. insert harold stock image here.
+	for (int i = 0; i < graphFromFile.size()-2; i++) {
+		//set string to be current line from file
+		string my_str = graphFromFile.at(i);
 
-	EulerianTour eulerian(MST, numVert);
+		//Filter out any spaces, [ or ]
+		my_str.erase(remove(my_str.begin(), my_str.end(), '['), my_str.end());
+		my_str.erase(remove(my_str.begin(), my_str.end(), ' '), my_str.end());
+		my_str.erase(remove(my_str.begin(), my_str.end(), ']'), my_str.end());
 
-	eulerian.printMST();
+		//if it's not the last character in the graph
+		if ((i != graphFromFile.size() - 1)) {
+			//loop through the filtered line's size
+			for (int j = 0; j < my_str.size(); j++) {
+				//add any characters that are not a comma
+				if (my_str.at(j) != ',') {
+					//add the characters to the temp string
+					temp += my_str.at(j);
+				}
+				else {
+					//convert the temp string to an int
+					int num = stoi(temp);
+					//add it to the nums vector
+					nums.push_back(num);
+					//clear the temp string
+					temp = "";
+					//if it's the last character in my_str
+					if (j == my_str.size() - 1) {
+						//loop through the nums vector
+						for (int x = 0; x < nums.size(); x++) {
+							//make sure we don't add duplicate edges
+							if ((i<x)) {
+								//add edge to graph at pos i, x and the number at the nums vector at x
+								cout << "start vertex: " << i << endl;
+								cout << "end vertex: " << x << endl;
+								cout << "weight : " << nums.at(x) << endl << endl;
+								test.addEdge(i, x, nums.at(x));
+							}
+						}
+						//clear the nums array
+						nums.clear();
+					}
+				}
+			}
+		}
+	}
 
-	// FINDS ODD VERTICES
-	eulerian.findOddVertices();
-	eulerian.printOddVertices();
+	if (!test.sameWeights()) {
+		// CONSTRUCT MINIMUM SPANNING TREE
+		test.kruskal();
+		MST = test.getMST();
 
-	// COMPLETE GRAPH INDUCED BY ODD VERTICES
-	eulerian.inducedSubgraph(test);
-	eulerian.printInducedSubgraph();
+		EulerianTour eulerian(MST, numVert);
 
-	// PERFECT MATCHING OF ODD VERTICE INDUCED SUBGRAPH
-	eulerian.findPerfectMatching();
-	eulerian.printPerfectMatching();
+		eulerian.printMST();
 
-	// OVERALY OF MINIMUM SPANNING TREE AND PERFECT MATCHING
-	eulerian.overlayGraphs();
-	eulerian.printOverlay();
+		// FINDS ODD VERTICES
+		eulerian.findOddVertices();
+		eulerian.printOddVertices();
 
-	// CONSTRUCTS HAMILTON CIRCUIT
-	eulerian.findHamiltonianCircuit(test);
-	eulerian.printHamiltonianCircuit();
+		// COMPLETE GRAPH INDUCED BY ODD VERTICES
+		eulerian.inducedSubgraph(test);
+		eulerian.printInducedSubgraph();
 
-	// Ouput to terminal
+		// PERFECT MATCHING OF ODD VERTICE INDUCED SUBGRAPH
+		eulerian.findPerfectMatching();
+		eulerian.printPerfectMatching();
+
+		// OVERALY OF MINIMUM SPANNING TREE AND PERFECT MATCHING
+		eulerian.overlayGraphs();
+		eulerian.printOverlay();
+
+		// CONSTRUCTS HAMILTON CIRCUIT
+		eulerian.findHamiltonianCircuit(test);
+		eulerian.printHamiltonianCircuit();
+	}
+	else {
+		cout << "distance between vertices are all the same, go in any order.";
+	}
+
+	//// CONSTRUCT MINIMUM SPANNING TREE
+	//test.kruskal();
+	//MST = test.getMST();
+
+	//EulerianTour eulerian(MST, numVert);
+
+	//eulerian.printMST();
+
+	//// FINDS ODD VERTICES
+	//eulerian.findOddVertices();
+	//eulerian.printOddVertices();
+
+	//// COMPLETE GRAPH INDUCED BY ODD VERTICES
+	//eulerian.inducedSubgraph(test);
+	//eulerian.printInducedSubgraph();
+
+	//// PERFECT MATCHING OF ODD VERTICE INDUCED SUBGRAPH
+	//eulerian.findPerfectMatching();
+	//eulerian.printPerfectMatching();
+
+	//// OVERALY OF MINIMUM SPANNING TREE AND PERFECT MATCHING
+	//eulerian.overlayGraphs();
+	//eulerian.printOverlay();
+
+	//// CONSTRUCTS HAMILTON CIRCUIT
+	//eulerian.findHamiltonianCircuit(test);
+	//eulerian.printHamiltonianCircuit();
+
+	//// Ouput to terminal
 
 	return 0;
 }
