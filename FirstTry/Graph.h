@@ -11,8 +11,8 @@ using namespace std;
 
 class Graph {
 private:
-    vector<pair<int, edge> > G;  // graph
-    vector<pair<int, edge> > T;  // mst
+    vector<pair<int, edge> > G;
+    vector<pair<int, edge> > T;
     int* parent;
     //vertices in the graph
     int V;
@@ -32,7 +32,7 @@ public:
 Graph::Graph(int V) {
     parent = new int[V];
 
-    //set parent to be 0,1,2,3,....v
+    //Set parent to be 0-V
     for (int i = 0; i < V; i++)
         parent[i] = i;
     //clear the grah and minimum spanning tree on initiantion
@@ -40,15 +40,17 @@ Graph::Graph(int V) {
     T.clear();
     weight = 0;
 }
+//add edges to our graph
 void Graph::addEdge(int u, int v, int w) {
     G.push_back(make_pair(w, edge(u, v)));
 }
+// Union find set
 int Graph::find_set(int i) {
     // If i is the parent of itself
     if (i == parent[i])
         return i;
     else
-        //recursibly call find_set to find the parent.
+        //recursivly call find_set to find the parent.
         return find_set(parent[i]);
 }
 
@@ -60,7 +62,7 @@ void Graph::union_set(int u, int v) {
 //Kruskals algorithm
 void Graph::kruskal() {
     int i, uRep, vRep;
-    //Sort the graph so the weight is in an increasing order
+    //Sort the graph by weight
     sort(G.begin(), G.end());
     //Loop through G
     for (i = 0; i < G.size(); i++) {
@@ -77,6 +79,7 @@ void Graph::kruskal() {
 }
 
 //Prints out the current minimum spanning tree
+// t.second.first is first vertex, t.second.second is second vertex t.first is the edge value
 void Graph::print() {
     cout << "Edge :"
         << " Weight" << endl;
@@ -96,8 +99,10 @@ int Graph::getMinimumWeight() {
     return weight;
 }
 
+// Check to see each edge has the same weight
 bool Graph::sameWeights() {
     int temp = G[0].first;
+    // loop through the graph
     for (int i = 1; i < G.size(); i++) {
         if (G[i].first != temp) {
             return false;
